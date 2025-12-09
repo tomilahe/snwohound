@@ -33,4 +33,12 @@ public class MovieShelf {
     public String getCategory() {
         return category;
     }
+
+    public void addMovie(Movie movie) {
+        if (category.equals(movie.getKategooria())) {
+            movies.add(movie);
+        } else {
+            throw new IllegalArgumentException("Film kuulub teise kategooriasse");
+        }
+    }
 }

@@ -5,17 +5,12 @@ public class Movie {
     private String eidr;
     private String kategooria;
     private String priceCategory;
-    private static Set<String> eidrs = new java.util.HashSet<>();
 
     public Movie(String nimi, String eidr, String kategooria, String priceCategory) {
-        if (eidrs.contains(eidr)) {
-            throw new IllegalArgumentException("EIDR already exists: " + eidr);
-        }
         this.nimi = nimi;
         this.eidr = eidr;
         this.kategooria = kategooria.toUpperCase();
         this.priceCategory = priceCategory;
-        eidrs.add(eidr);
     }
 
     public double getLendingPrice(int days) {
@@ -31,12 +26,7 @@ public class Movie {
     }
 
     public double getLendingPrice() {
-        return switch (priceCategory) {
-            case "Madal" -> 1;
-            case "Keskmine" -> 2;
-            case "Kõrge" -> 4;
-            default -> 0;
-        };
+        return getLendingPrice(1);
     }
 
     public String getNimi() {

@@ -1,26 +1,27 @@
+import org.junit.jupiter.api.Assertions;
+
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Main {
 
 
     public static void main(String[] args) {
-        MovieRental movieRental = new MovieRental(new ArrayList<>());
-        Movie movie = new Movie("One", "1", "ACTION", "Madal");
-        Movie movie2 = new Movie("Two", "2", "DRAMA", "Keskmine");
-        Movie movie3 = new Movie("Three", "3", "DRAMA", "Kõrge");
-        Movie movie4 = new Movie("Four", "4", "ACTION", "Madal");
-        Movie movie5 = new Movie("Five", "5", "ACTION", "Kõrge");
-        movieRental.add(movie);
-        System.out.println(movieRental.getMovie("1"));
-        movieRental.removeMovie("1");
-        System.out.println(movieRental.getMovie("1"));
-        movieRental.add(movie2);
-        movieRental.add(movie3);
-        movieRental.add(movie4);
-        movieRental.add(movie5);
-        System.out.println(movieRental);
-        movieRental.getAllCategories();
+        User user = new User("TestUser", 10.0, new ArrayList<>());
+        User user2 = new User("TestUser2", 10.0, new ArrayList<>());
+        List<MovieShelf> shelves = new ArrayList<>();
+        MovieRental rental = new MovieRental(shelves);
+        rental.addUser(user);
+        rental.addUser(user2);
+        Movie m1 = new Movie("Name1", "1", "action", "Madal");
+        Movie m2 = new Movie("Name2", "2", "action", "Madal");
+        rental.add(m1);
+        rental.add(m2);
+        rental.lendMovies("1", 3, "Testuser");
+        rental.lendMovies("2", 1, "Testuser2");
+        System.out.println(user.getLendedMovies());
+        System.out.println(user2.getLendedMovies());
 
     }
 }

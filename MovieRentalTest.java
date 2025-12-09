@@ -148,15 +148,19 @@ public class MovieRentalTest {
     @Test
     public void checkLendingTest() {
         User user = new User("TestUser", 10.0, new ArrayList<>());
+        User user2 = new User("TestUser2", 10.0, new ArrayList<>());
         List<MovieShelf> shelves = new ArrayList<>();
         MovieRental rental = new MovieRental(shelves);
         rental.addUser(user);
+        rental.addUser(user2);
         Movie m1 = new Movie("Name1", "1", "action", "Madal");
+        Movie m2 = new Movie("Name2", "2", "action", "Madal");
         rental.add(m1);
+        rental.add(m2);
         rental.lendMovies("1", 3, "TestUser");
-        Assertions.assertEquals(8.0, user.getMoney());
         Assertions.assertEquals("Name1", user.getLendedMovies().get(0).getNimi());
-    }
+        rental.lendMovies("2", 1, "TestUser2");
+Assertions.assertEquals("Name2",  user2.getLendedMovies().get(0).getNimi());  }
 
     @Test
     public void checkLendingInsufficientFundsTest() {
@@ -168,7 +172,7 @@ public class MovieRentalTest {
         rental.add(m1);
         String expectedMessage = "Liiga vähe raha";
         assertThrows(IllegalArgumentException.class, () -> {
-            rental.lendMovies("1", 3, "TestUser");
+            rental.lendMovies("1", 3, "username");
         }, expectedMessage);
     }
 

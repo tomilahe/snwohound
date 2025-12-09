@@ -3,9 +3,11 @@ import java.util.*;
 public class MovieRental {
     private List<MovieShelf> movieShelves;
     private List<User> users;
+    private List<Movie> movies;
 
     public MovieRental(List<MovieShelf> movieShelves) {
         this.movieShelves = movieShelves;
+        this.movies = new ArrayList<>();
     }
 
     public void addUser(User user) {
@@ -20,9 +22,15 @@ public class MovieRental {
 
 
     public void add(Movie movie) {
+        for (Movie movie1 : movies) {
+            if (movie1.getEidr().equals(movie.getEidr())) {
+                return;
+            }
+        }
+        movies.add(movie);
         for (MovieShelf movieShelf : movieShelves) {
             if (movieShelf.getCategory().equals(movie.getKategooria())) {
-                movieShelf.getMovies().add(movie);
+                movieShelf.addMovie(movie);
                 return;
             }
         }
@@ -70,20 +78,21 @@ public class MovieRental {
     }
 
     public void lendMovies(String eidr, int days, String username) {
-        int userIdx = users.indexOf(username);
-        User user = users.get(userIdx + 1);
-        double userMoney = user.getMoney();
-        Movie requestedMovie = getMovie(eidr);
-        double price = requestedMovie.getLendingPrice(days);
-        if (price < userMoney) {
-            user.addLendedMovie(requestedMovie);
-            user.setMoney(userMoney - price);
-            movieShelves.remove(requestedMovie); //Eeldusel, et filmid on füüsilised ja filmi koopiaid on üks
-            System.out.println("Film " + requestedMovie + " laenutatud");
-        } else {
-            throw new IllegalArgumentException("Liiga vähe raha");
+        for (User user : users) {
+            if (user.getName().equals(username)) {
+                double userMoney = user.getMoney();
+                Movie requestedMovie = getMovie(eidr);
+                double price = requestedMovie.getLendingPrice(days);
+                if (price < userMoney) {
+                    user.addLendedMovie(requestedMovie);
+                    user.setMoney(userMoney - price);
+                    System.out.println("Film " + requestedMovie + " laenutatud kasutajale " + user.getName() );
+                } else {
+                    throw new IllegalArgumentException("Liiga vähe raha");
+                }
+                return;
+            }
         }
-
 
     }
 
